@@ -9,10 +9,10 @@ app.use(bodyParser.json());
 
 // setting koneksi database
 const dbConfig = {
-  host: 'db', // sesuai service name di docker-compose
-  user: 'root',
-  password: 'root',
-  database: 'testdb'
+  host: process.env.DB_HOST,    // --> 'db' dari docker-compose
+  user: process.env.DB_USER,    // --> 'root'
+  password: process.env.DB_PASSWORD,  // --> 'example'
+  database: process.env.DB_NAME  
 };
 
 let db;

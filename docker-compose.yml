@@ -1,37 +1,29 @@
-version: '3'
+version: '3.3'
 services:
   frontend:
-    build:
-      context: ./fe
-      dockerfile: dockerfile
+    build: ./fe
     ports:
-      - "8020:80"
-    networks:
-      - app-network
+      - "8020:80"         # port 80 nginx di dalam, ke 8080 di luar
     depends_on:
       - backend
 
   backend:
-    build:
-      context: ./be
-      dockerfile: dockerfile
+    build: ./be
     ports:
-      - "3020:3020"
-    networks:
-      - app-network
+      - "3020:3020"       # backend diakses lewat 3000
+    environment:
+      - DB_HOST=db        # kasih tau backend, host DB itu 'db'
+      - DB_USER=root
+      - DB_PASSWORD=testing123
+      - DB_NAME=testdb
     depends_on:
       - db
 
   db:
     image: mysql:8
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: testing123
       MYSQL_DATABASE: testdb
     ports:
       - "3306:3306"
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
